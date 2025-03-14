@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>カードスライダー</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f5f5f5;
+            overflow: hidden;
+        }
+        .slider {
+            position: relative;
+            width: 300px;
+            height: 400px;
+        }
+        .card {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border: 1px solid blue;
+            border-radius: 10px;
+            transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+        }
+        .front {
+            z-index: 2;
+            transform: translate(0, 0);
+            opacity: 1;
+        }
+        .middle {
+            z-index: 1;
+            transform: translate(14%, 0) rotate(10deg) scale(0.95);
+            opacity: 0.8;
+        }
+        .exit {
+            z-index: 0;
+            opacity: 0;
+            transform: translate(-10%, -10%) rotate(-6deg);
+        }
+        .enter {
+            z-index: 0;
+            opacity: 0;
+            transform: translate(20%, 6%) rotate(12deg);
+        }
+    </style>
+</head>
+<body>
+    <div class="slider">
+        <img src="./images/image.jpg" class="card front">
+        <img src="./images/image.jpg" class="card middle">
+        <img src="./images/image.jpg" class="card enter">
+    </div>
+
+    <script>
+        const cards = document.querySelectorAll(".card");
+        let index = 0;
+
+        function updateCards() {
+            cards[index].classList.remove("front");
+            cards[index].classList.add("exit");
+
+            let nextIndex = (index + 1) % cards.length;
+            let afterNextIndex = (index + 2) % cards.length;
+
+            cards[nextIndex].classList.remove("middle");
+            cards[nextIndex].classList.add("front");
+
+            cards[afterNextIndex].classList.remove("enter");
+            cards[afterNextIndex].classList.add("middle");
+
+            setTimeout(() => {
+                cards[index].classList.remove("exit");
+                cards[index].classList.add("enter");
+                index = nextIndex;
+            }, 500);
+        }
+
+        setInterval(updateCards, 6000);
+    </script>
+</body>
+</html>
